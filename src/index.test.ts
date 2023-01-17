@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import {render, screen} from '@testing-library/svelte'
 
-describe('sum test', () => {
-	it('adds 1 + 2 to equal 3', () => {
-		expect(1 + 2).toBe(3);
-	});
-});
+import ControlPanel from './routes/ControlPanel.svelte';
+
+it('should render', () => {
+	const element = render(ControlPanel, {})
+	expect(() => element.getByText('This is a test')).not.toThrow()
+})
