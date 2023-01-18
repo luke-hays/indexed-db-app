@@ -88,7 +88,7 @@ const DBNAME = 'customer_db';
  */
 export const clearDB = () => {
   console.log('Delete all rows from the Customers database');
-  let customer = new Customer(DBNAME);
+  const customer = new Customer(DBNAME);
   customer.removeAllRows();
 }
 
@@ -103,6 +103,6 @@ export const loadDB = () => {
     { userid: '444', name: 'Bill', email: 'bill@company.com' },
     { userid: '555', name: 'Donna', email: 'donna@home.org' }
   ];
-  let customer = new Customer(DBNAME);
+  const customer = new Customer(DBNAME);
   customer.initialLoad(customerData);
 }
