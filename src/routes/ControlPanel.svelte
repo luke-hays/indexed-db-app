@@ -1,5 +1,6 @@
 <script>
-  import {loadDB} from "$lib/utils/db-init";
+  import {clearDB, loadDB} from "$lib/utils/db-init";
+  import { queryDB } from "$lib/utils/tools";
   import { NOTIFICATIONS, DB_EVENTS } from "$lib/utils/constants";
 
   import Logs from "./Logs.svelte";
@@ -14,6 +15,8 @@
 
   let events = []
 
+  let results = []
+
   const onLoadDBClick = () => {
     loadButtonIsDisabled = true
     notification = NOTIFICATIONS.LOAD_BEGIN
@@ -25,16 +28,32 @@
     }, 2000)
   }
 
-  const onQueryDBClick = () => {}
+  const onQueryDBClick = () => {
+    notification = NOTIFICATIONS.QUERY_BEGIN
+    setTimeout(() => {
+      queryDB(data => {
+        results = [...data]
+      })
+      notification = NOTIFICATIONS.QUERY_END
+      events = [DB_EVENTS.QUERY, ...events]
+    }, 2000)
+  }
 
   const onClearDBClick = () => {
     loadButtonIsDisabled = false
-    clearButtonIsDisabled = true
+    notification = NOTIFICATIONS.CLEAR_BEGIN
+    setTimeout(() => {
+      clearDB()
+      results = []
+      notification = NOTIFICATIONS.CLEAR_END
+      clearButtonIsDisabled = true
+      events = [DB_EVENTS.CLEAR, ...events]
+    }, 2000)
   }
 </script>
 
 <Notifications message={notification}/>
-<Results/>
+<Results results={results}/>
 <button on:click={onLoadDBClick} disabled={loadButtonIsDisabled}>
   LoadDB
 </button>

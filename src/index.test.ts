@@ -7,9 +7,22 @@ import { loadDB, clearDB } from '$lib/utils/db-init';
 import { queryDB } from '$lib/utils/tools';
 import ControlPanel from './routes/ControlPanel.svelte';
 
+const customerData = [
+  { userid: '444', name: 'Bill', email: 'bill@company.com' },
+  { userid: '555', name: 'Donna', email: 'donna@home.org' }
+];
 
 vi.mock('$lib/utils/db-init', () => {
-  return {loadDB: vi.fn()}
+  return {
+    loadDB: vi.fn(), 
+    clearDB: vi.fn()
+  }
+})
+
+vi.mock('$lib/utils/tools', () => {
+  return {
+    queryDB: vi.fn((callback) => callback(customerData)), 
+  }
 })
 
 beforeEach(() => {
@@ -90,12 +103,15 @@ describe('app should', () => {
   })
 
   describe('have button Query DB onClick functionality include', () => {
-    test.skip('disables LoadDB, enables Query DB and Clear DB', async () => {
+    test('disables LoadDB, enables Query DB and Clear DB', async () => {
       const panel = render(ControlPanel, {})
       const loadButton = panel.queryByRole('button', {name: 'LoadDB'})
       const queryButton = panel.queryByRole('button', {name: 'QueryDB'})
       const clearButton = panel.queryByRole('button', {name: 'ClearDB'})
   
+      await fireEvent.click(loadButton)
+      await vi.advanceTimersByTimeAsync(2000)
+
       await fireEvent.click(queryButton)
       await vi.advanceTimersByTimeAsync(2000)
 
@@ -104,18 +120,17 @@ describe('app should', () => {
       expect(clearButton).toBeEnabled()
     })
 
-    test.skip('fires queryDB event', async () => {
-      const spy = vi.spyOn('$lib/utils/tools', queryDB)
+    test('fires queryDB event', async () => {
       const panel = render(ControlPanel, {})
       const queryButton = panel.queryByRole('button', {name: 'QueryDB'})
 
       await fireEvent.click(queryButton)
       await vi.advanceTimersByTimeAsync(2000)
 
-      expect(spy).toHaveBeenCalledOnce()
+      expect(queryDB).toHaveBeenCalledOnce()
     })
 
-    test.skip('causes notifications to render and be logged for query event, renders query result', async () => {
+    test('causes notifications to render and be logged for query event, renders query result', async () => {
       const panel = render(ControlPanel, {})
       const loadButton = panel.queryByRole('button', {name: 'LoadDB'})
       const queryButton = panel.queryByRole('button', {name: 'QueryDB'})
@@ -124,22 +139,24 @@ describe('app should', () => {
       await vi.advanceTimersByTimeAsync(2000)
 
       await fireEvent.click(queryButton)
-      await vi.advanceTimersByTimeAsync(2000)
 
       const startNotification = panel.queryByText(NOTIFICATIONS.QUERY_BEGIN)
+      expect(startNotification).toBeInTheDocument()
+
+      await vi.advanceTimersByTimeAsync(2000)
+
+      const results = panel.queryByTestId('customer-table')
       const endNotification = panel.queryByText(NOTIFICATIONS.QUERY_END)
       const newLog = panel.queryByText(DB_EVENTS.QUERY)
-      const results = panel.queryByTestId('customer-table')
 
-      expect(startNotification).toBeInTheDocument()
+      expect(results?.children.length).toBe(2)
       expect(endNotification).toBeInTheDocument()
       expect(newLog).toBeInTheDocument()
-      expect(results?.children.length).toBe(2)
     })
   })
 
   describe('have button Clear DB onClick functionality include', () => {
-    test.skip('disable Clear DB, enables Query DB and Load DB', async () => {
+    test('disable Clear DB, enables Query DB and Load DB', async () => {
       const panel = render(ControlPanel, {})
       const loadButton = panel.queryByRole('button', {name: 'LoadDB'})
       const queryButton = panel.queryByRole('button', {name: 'QueryDB'})
@@ -160,9 +177,7 @@ describe('app should', () => {
       expect(clearButton).toBeDisabled()
     })
 
-    test.skip('fires clearDB event', async () => {
-      const spy = vi.spyOn('$lib/utils/db-init', clearDB)
-
+    test('fires clearDB event', async () => {
       const panel = render(ControlPanel, {})
       const loadButton = panel.queryByRole('button', {name: 'LoadDB'})
       const clearButton = panel.queryByRole('button', {name: 'ClearDB'})
@@ -173,10 +188,10 @@ describe('app should', () => {
       await fireEvent.click(clearButton)
       await vi.advanceTimersByTimeAsync(2000)
 
-      expect(spy).toHaveBeenCalledOnce()
+      expect(clearDB).toHaveBeenCalledOnce()
     })
 
-    test.skip('causes notifications to render and be logged for clear event and clears results', async () => {
+    test('causes notifications to render and be logged for clear event and clears results', async () => {
       const panel = render(ControlPanel, {})
       const loadButton = panel.queryByRole('button', {name: 'LoadDB'})
       const queryButton = panel.queryByRole('button', {name: 'QueryDB'})
@@ -189,18 +204,19 @@ describe('app should', () => {
       await vi.advanceTimersByTimeAsync(2000)
 
       const results = panel.queryByTestId('customer-table')
-
       expect(results?.children.length).toBe(2)
 
       await fireEvent.click(clearButton)
-      await vi.advanceTimersByTimeAsync(2000)
 
       const startNotification = panel.queryByText(NOTIFICATIONS.CLEAR_BEGIN)
+      expect(startNotification).toBeInTheDocument()
+
+      await vi.advanceTimersByTimeAsync(2000)
+
       const endNotification = panel.queryByText(NOTIFICATIONS.CLEAR_END)
       const newLog = panel.queryByText(DB_EVENTS.CLEAR)
       const emptyResults = panel.queryByText(EMPTY_DB_RESULTS)
 
-      expect(startNotification).toBeInTheDocument()
       expect(endNotification).toBeInTheDocument()
       expect(newLog).toBeInTheDocument()
       expect(emptyResults).toBeInTheDocument()

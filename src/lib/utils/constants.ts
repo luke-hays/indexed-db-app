@@ -15,4 +15,6 @@ const DB_EVENTS = {
   CLEAR: 'Clear database called'
 }
 
-export { EMPTY_DB_RESULTS, NOTIFICATIONS, DB_EVENTS }
+const DBNAME = 'customer_db';
+
+export { EMPTY_DB_RESULTS, NOTIFICATIONS, DB_EVENTS, DBNAME }
