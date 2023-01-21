@@ -5,24 +5,24 @@ import { describe, expect, vi } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/svelte'
 import '@testing-library/jest-dom'
 
-import { EMPTY_DB_RESULTS, NOTIFICATIONS, DB_EVENTS } from './lib/utils/constants';
-import { loadDB, clearDB } from './lib/utils/db-init';
-import { queryDB } from './lib/utils/tools';
-import ControlPanel from './routes/ControlPanel.svelte'
+import { EMPTY_DB_RESULTS, NOTIFICATIONS, DB_EVENTS } from '../lib/utils/constants';
+import { loadDB, clearDB } from '../lib/utils/db-init';
+import { queryDB } from '../lib/utils/tools';
+import ControlPanel from './ControlPanel.svelte'
 
 const customerData = [
   { userid: '444', name: 'Bill', email: 'bill@company.com' },
   { userid: '555', name: 'Donna', email: 'donna@home.org' }
 ];
 
-vi.mock('./lib/utils/db-init', () => {
+vi.mock('../lib/utils/db-init', () => {
   return {
     loadDB: vi.fn(), 
     clearDB: vi.fn()
   }
 })
 
-vi.mock('./lib/utils/tools', () => {
+vi.mock('../lib/utils/tools', () => {
   return {
     queryDB: vi.fn((callback) => callback(customerData)), 
   }

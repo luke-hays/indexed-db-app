@@ -1,10 +1,13 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-// External code provided, link to source in README
-// Disabling linter in this since I don't care to appease it for this project
+import type { Customer as CustomerType } from "../interfaces/customer"
+interface DBEventTarget extends EventTarget {
+  result: IDBDatabase
+  error: DOMException
+}
 
 class Customer {
-  constructor(dbName) {
+  dbName: string
+
+  constructor(dbName : string) {
     this.dbName = dbName;
     if (!window.indexedDB) {
       window.alert("Your browser doesn't support a stable version of IndexedDB. \
@@ -20,24 +23,31 @@ class Customer {
     const request = indexedDB.open(this.dbName, 1);
 
     request.onerror = (event) => {
-      console.log('removeAllRows - Database error: ', event.target.error.code,
-        " - ", event.target.error.message);
+      const errorName = (event.target as DBEventTarget).error.name
+      const errorMessage = (event.target as DBEventTarget).error.message
+      console.log('removeAllRows - Database error: ', errorName, " - ", errorMessage);
     };
 
     request.onsuccess = (event) => {
       console.log('Deleting all customers...');
-      const db = event.target.result;
+
+    const db = (event.target as DBEventTarget).result
       const txn = db.transaction('customers', 'readwrite');
+
       txn.onerror = (event) => {
-        console.log('removeAllRows - Txn error: ', event.target.error.code,
-          " - ", event.target.error.message);
+        const errorName = (event.target as DBEventTarget).error.name
+        const errorMessage = (event.target as DBEventTarget).error.message
+        console.log('removeAllRows - Txn error: ', errorName, " - ", errorMessage);
       };
-      txn.oncomplete = (event) => {
+
+      txn.oncomplete = () => {
         console.log('All rows removed!');
       };
+
       const objectStore = txn.objectStore('customers');
       const getAllKeysRequest = objectStore.getAllKeys();
-      getAllKeysRequest.onsuccess = (event) => {
+
+      getAllKeysRequest.onsuccess = () => {
         getAllKeysRequest.result.forEach(key => {
           objectStore.delete(key);
         });
@@ -50,23 +60,20 @@ class Customer {
    * @param {[object]} customerData Data to add
    * @memberof Customer
    */
-  initialLoad = (customerData) => {
+  initialLoad = (customerData: Array<CustomerType>) => {
     const request = indexedDB.open(this.dbName, 1);
 
     request.onerror = (event) => {
-      console.log('initialLoad - Database error: ', event.target.error.code,
-        " - ", event.target.error.message);
+      const errorName = (event.target as DBEventTarget).error.name
+      const errorMessage = (event.target as DBEventTarget).error.message
+      console.log('initialLoad - Database error: ', errorName, " - ", errorMessage);
     };
 
     request.onupgradeneeded = (event) => {
       console.log('Populating customers...');
-      const db = event.target.result;
+      const db = (event.target as DBEventTarget).result
       const objectStore = db.createObjectStore('customers', { keyPath: 'userid' });
-      objectStore.onerror = (event) => {
-        console.log('initialLoad - objectStore error: ', event.target.error.code,
-          " - ", event.target.error.message);
-      };
-
+      
       // Create an index to search customers by name and email
       objectStore.createIndex('name', 'name', { unique: false });
       objectStore.createIndex('email', 'email', { unique: true });
@@ -75,6 +82,7 @@ class Customer {
       customerData.forEach(function(customer) {
         objectStore.put(customer);
       });
+
       db.close();
     };
   }
