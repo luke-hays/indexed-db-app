@@ -1,5 +1,5 @@
-<script>
-  export let events = [];
+<script lang="ts">
+  export let events: Array<string> = [];
 </script>
 
 <div>

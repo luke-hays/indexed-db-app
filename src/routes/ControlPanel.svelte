@@ -1,8 +1,9 @@
-<script>
+<script lang='ts'>
   import {clearDB, loadDB} from "$lib/utils/db-init";
   import { queryDB } from "$lib/utils/tools";
-  import { NOTIFICATIONS, DB_EVENTS } from "$lib/utils/constants";
+  import { NOTIFICATIONS, DB_EVENTS } from "$lib/utils/constants"; 
 
+  import type { Customer } from "$lib/interfaces/customer";
   import Logs from "./Logs.svelte";
   import Results from "./Results.svelte";
   import Notifications from "./Notifications.svelte";
@@ -13,9 +14,8 @@
 
   let notification = ''
 
-  let events = []
-
-  let results = []
+  let events: Array<string> = []
+  let results: Array<Customer> = []
 
   const onLoadDBClick = () => {
     loadButtonIsDisabled = true
@@ -31,7 +31,7 @@
   const onQueryDBClick = () => {
     notification = NOTIFICATIONS.QUERY_BEGIN
     setTimeout(() => {
-      queryDB(data => {
+      queryDB((data: Array<Customer>) => {
         results = [...data]
       })
       notification = NOTIFICATIONS.QUERY_END
@@ -54,14 +54,15 @@
 
 <Notifications message={notification}/>
 <Results results={results}/>
-<button on:click={onLoadDBClick} disabled={loadButtonIsDisabled}>
-  LoadDB
-</button>
-<button on:click={onQueryDBClick} disabled={queryButtonIsDisabled}>
-  QueryDB
-</button>
-<button on:click={onClearDBClick} disabled={clearButtonIsDisabled}>
-  ClearDB
-</button>
-
+<div>
+  <button on:click={onLoadDBClick} disabled={loadButtonIsDisabled}>
+    LoadDB
+  </button>
+  <button on:click={onQueryDBClick} disabled={queryButtonIsDisabled}>
+    QueryDB
+  </button>
+  <button on:click={onClearDBClick} disabled={clearButtonIsDisabled}>
+    ClearDB
+  </button>
+</div>
 <Logs {events}/>
