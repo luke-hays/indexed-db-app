@@ -10,12 +10,16 @@
     <thead>
       <th>name</th>
       <th>email</th>
+      <th>total sales</th>
+      <th>last order date</th>
     </thead>
     <tbody data-testid="customer-table">
-      {#each results as {name, email}}
+      {#each results as {name, email, totalSales, dateOfLastOrder}}
       <tr>
         <td>{name}</td>
         <td>{email}</td>
+        <td>{totalSales}</td>
+        <td>{dateOfLastOrder}</td>
       </tr>
       {/each}
     </tbody>

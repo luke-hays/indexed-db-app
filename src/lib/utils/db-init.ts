@@ -77,6 +77,8 @@ class Customer {
       // Create an index to search customers by name and email
       objectStore.createIndex('name', 'name', { unique: false });
       objectStore.createIndex('email', 'email', { unique: true });
+      objectStore.createIndex('totalSales', 'totalSales', { unique: false });
+      objectStore.createIndex('dateOfLastOrder', 'dateOfLastOrder', { unique: false });
 
       // Populate the database with the initial set of rows
       customerData.forEach(function(customer) {
@@ -108,8 +110,8 @@ export const loadDB = () => {
 
   // Customers to add to initially populate the database with
   const customerData = [
-    { userid: '444', name: 'Bill', email: 'bill@company.com' },
-    { userid: '555', name: 'Donna', email: 'donna@home.org' }
+    { userid: '444', name: 'Bill', email: 'bill@company.com', totalSales: 42, dateOfLastOrder: new Date() },
+    { userid: '555', name: 'Donna', email: 'donna@home.org', totalSales: 114, dateOfLastOrder: new Date() }
   ];
   const customer = new Customer(DBNAME);
   customer.initialLoad(customerData);
