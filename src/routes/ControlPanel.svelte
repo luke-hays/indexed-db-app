@@ -1,9 +1,9 @@
 <script lang='ts'>
-  import {clearDB, loadDB} from "$lib/utils/db-init";
-  import { queryDB } from "$lib/utils/tools";
-  import { NOTIFICATIONS, DB_EVENTS } from "$lib/utils/constants"; 
+  import {clearDB, loadDB} from "../lib/utils/db-init";
+  import { queryDB } from "../lib/utils/tools";
+  import { NOTIFICATIONS, DB_EVENTS } from "../lib/utils/constants"; 
 
-  import type { Customer } from "$lib/interfaces/customer";
+  import type { Customer } from "../lib/interfaces/customer";
   import Logs from "./Logs.svelte";
   import Results from "./Results.svelte";
   import Notifications from "./Notifications.svelte";

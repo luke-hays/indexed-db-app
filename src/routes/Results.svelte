@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Customer } from "$lib/interfaces/customer";
-  import { EMPTY_DB_RESULTS } from '$lib/utils/constants';
+  import type { Customer } from "../lib/interfaces/customer";
+  import { EMPTY_DB_RESULTS } from '../lib/utils/constants';
   
   export let results: Array<Customer> = []
 </script>
