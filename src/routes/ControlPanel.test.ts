@@ -1,6 +1,3 @@
-// Annoying errors are appearing here, using this to silence them for time being
-// eslint-disable-next-line
-// @ts-nocheck
 import { describe, expect, vi } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/svelte'
 import '@testing-library/jest-dom'
@@ -64,7 +61,7 @@ describe('app should', () => {
   describe('have button Load DB onClick functionality include', () => {
     test('disables LoadDB, enables Query DB and Clear DB', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
       const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
       const clearButton = screen.queryByRole('button', {name: 'ClearDB'})
   
@@ -78,7 +75,7 @@ describe('app should', () => {
 
     test('fires loadDB event', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
 
       await fireEvent.click(loadButton)
       await vi.advanceTimersByTimeAsync(2000)
@@ -88,7 +85,7 @@ describe('app should', () => {
 
     test('causes notifications to render and be logged for load event', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
 
       await fireEvent.click(loadButton)
 
@@ -108,8 +105,8 @@ describe('app should', () => {
   describe('have button Query DB onClick functionality include', () => {
     test('disables LoadDB, enables Query DB and Clear DB', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
-      const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
+      const queryButton = (screen.queryByRole('button', {name: 'QueryDB'})) as Element
       const clearButton = screen.queryByRole('button', {name: 'ClearDB'})
   
       await fireEvent.click(loadButton)
@@ -125,7 +122,7 @@ describe('app should', () => {
 
     test('fires queryDB event', async () => {
       render(ControlPanel)
-      const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
+      const queryButton = (screen.queryByRole('button', {name: 'QueryDB'})) as Element
 
       await fireEvent.click(queryButton)
       await vi.advanceTimersByTimeAsync(2000)
@@ -135,8 +132,8 @@ describe('app should', () => {
 
     test('causes notifications to render and be logged for query event, renders query result', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
-      const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
+      const queryButton = (screen.queryByRole('button', {name: 'QueryDB'})) as Element
 
       await fireEvent.click(loadButton)
       await vi.advanceTimersByTimeAsync(2000)
@@ -161,9 +158,9 @@ describe('app should', () => {
   describe('have button Clear DB onClick functionality include', () => {
     test('disable Clear DB, enables Query DB and Load DB', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
       const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
-      const clearButton = screen.queryByRole('button', {name: 'ClearDB'})
+      const clearButton = (screen.queryByRole('button', {name: 'ClearDB'})) as Element
   
       await fireEvent.click(loadButton)
       await vi.advanceTimersByTimeAsync(2000)
@@ -182,8 +179,8 @@ describe('app should', () => {
 
     test('fires clearDB event', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
-      const clearButton = screen.queryByRole('button', {name: 'ClearDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
+      const clearButton = (screen.queryByRole('button', {name: 'ClearDB'})) as Element
 
       await fireEvent.click(loadButton)
       await vi.advanceTimersByTimeAsync(2000)
@@ -196,9 +193,9 @@ describe('app should', () => {
 
     test('causes notifications to render and be logged for clear event and clears results', async () => {
       render(ControlPanel)
-      const loadButton = screen.queryByRole('button', {name: 'LoadDB'})
-      const queryButton = screen.queryByRole('button', {name: 'QueryDB'})
-      const clearButton = screen.queryByRole('button', {name: 'ClearDB'})
+      const loadButton = (screen.queryByRole('button', {name: 'LoadDB'})) as Element
+      const queryButton = (screen.queryByRole('button', {name: 'QueryDB'})) as Element
+      const clearButton = (screen.queryByRole('button', {name: 'ClearDB'})) as Element
 
       await fireEvent.click(loadButton)
       await vi.advanceTimersByTimeAsync(2000)
