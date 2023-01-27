@@ -6,7 +6,7 @@ interface DBEventTarget extends EventTarget {
   error: DOMException
 }
 
-type RequestCallback = (a: Array<Customer>) => Array<Customer>
+type RequestCallback = (a: Array<Customer>) => void
 
 export const dbLogEventFormatter = (time: Date, event: string) => {
   return `${time} - ${event}`

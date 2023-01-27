@@ -52,17 +52,51 @@
   }
 </script>
 
-<Notifications message={notification}/>
-<Results results={results}/>
-<div>
-  <button on:click={onLoadDBClick} disabled={loadButtonIsDisabled}>
-    LoadDB
-  </button>
-  <button on:click={onQueryDBClick} disabled={queryButtonIsDisabled}>
-    QueryDB
-  </button>
-  <button on:click={onClearDBClick} disabled={clearButtonIsDisabled}>
-    ClearDB
-  </button>
+<div id='control-panel'>
+  <Notifications message={notification}/>
+  <Results results={results}/>
+  <div id='db-actions'>
+    <button on:click={onLoadDBClick} disabled={loadButtonIsDisabled}>
+      LoadDB
+    </button>
+    <button on:click={onQueryDBClick} disabled={queryButtonIsDisabled}>
+      QueryDB
+    </button>
+    <button on:click={onClearDBClick} disabled={clearButtonIsDisabled}>
+      ClearDB
+    </button>
+  </div>
+  <Logs {events}/>
 </div>
-<Logs {events}/>
+
+
+<style>
+  #control-panel {
+    border: 1px solid white;
+  }
+
+  #db-actions {
+    background-color: white;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0px;
+  }
+
+  button {
+    margin: 0px 5px;
+    background-color: rgb(251, 253, 237);;
+    border: 2px solid rgb(76, 82, 88);
+    border-radius: 5px;
+    font-family: sans-serif;
+    height: 2em;
+    width: 7em;
+    transition: 0.3s;
+    opacity: 0.6;
+  }
+
+  button:hover:enabled {
+    opacity: 1;    
+  }
+</style>
