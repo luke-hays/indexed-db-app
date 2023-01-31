@@ -9,10 +9,10 @@
   {#if results.length > 0}
     <table>
       <thead>
-        <th>name</th>
-        <th>email</th>
-        <th>total sales</th>
-        <th>last order date</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Total Sales</th>
+        <th>Last order date</th>
       </thead>
       <tbody data-testid="customer-table">
         {#each results as {name, email, totalSales, dateOfLastOrder}}
@@ -20,7 +20,7 @@
           <td>{name}</td>
           <td>{email}</td>
           <td>{totalSales}</td>
-          <td>{dateOfLastOrder}</td>
+          <td>{dateOfLastOrder.toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}</td>
         </tr>
         {/each}
       </tbody>
@@ -32,13 +32,24 @@
 
 <style>
   div {
-    background-color: rgb(165, 221, 165);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  th {
+  table {
+    border-collapse: collapse;
+    margin: 10px;
+    width: 80%;
+  }
+
+  table, th, td {
+    border: 1px solid;
+  }
+  
+  th, td {
     text-align: left;
   }
 </style>

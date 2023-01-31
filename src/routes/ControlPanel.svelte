@@ -17,6 +17,10 @@
   let events: Array<string> = []
   let results: Array<Customer> = []
 
+  const formatLogEvent = (event: string) => {
+    return `${new Date().toISOString()}: ${event}`
+  }
+
   const onLoadDBClick = () => {
     loadButtonIsDisabled = true
     notification = NOTIFICATIONS.LOAD_BEGIN
@@ -24,7 +28,7 @@
       loadDB()
       notification = NOTIFICATIONS.LOAD_END
       clearButtonIsDisabled = false
-      events = [DB_EVENTS.LOAD, ...events]
+      events = [formatLogEvent(DB_EVENTS.LOAD), ...events]
     }, 2000)
   }
 
@@ -35,7 +39,7 @@
         results = [...data]
       })
       notification = NOTIFICATIONS.QUERY_END
-      events = [DB_EVENTS.QUERY, ...events]
+      events = [formatLogEvent(DB_EVENTS.QUERY), ...events]
     }, 2000)
   }
 
@@ -47,7 +51,7 @@
       results = []
       notification = NOTIFICATIONS.CLEAR_END
       clearButtonIsDisabled = true
-      events = [DB_EVENTS.CLEAR, ...events]
+      events = [formatLogEvent(DB_EVENTS.CLEAR), ...events]
     }, 2000)
   }
 </script>
@@ -94,9 +98,14 @@
     width: 7em;
     transition: 0.3s;
     opacity: 0.6;
+    color: black
   }
 
   button:hover:enabled {
     opacity: 1;    
+  }
+
+  button:disabled {
+    opacity: .3;    
   }
 </style>
